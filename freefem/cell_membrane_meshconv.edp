@@ -1,4 +1,4 @@
-// Mesh convergence test for the membrane cell problem at phi = 0.20.
+// Mesh convergence test for the membrane cell problem at phi = 0.20. 
 
 verbosity = 0;
 real Eyoung = 1.0;
