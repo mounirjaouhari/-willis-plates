@@ -1,6 +1,6 @@
 """Quick test that scikit-fem Argyris element works on a simple biharmonic problem.
 
-Solves:  Delta^2 w = 1   on (0,1)^2,  w = 0, partial_n w = 0 on boundary.
+Solves:  Delta^2 w = 1   on (0,1)^2,  w = 0, partial_n w = 0 on boundary. 
 Expected: w_max ~ 0.00126 (clamped square plate, uniform load, normalized).
 """
 
