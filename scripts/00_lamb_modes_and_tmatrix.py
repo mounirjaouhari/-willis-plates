@@ -1,5 +1,5 @@
 """
-Q1 validation: the coupled Kirchhoff--Lame thin-plate operator captures the
+Q1 validation: the coupled Kirchhoff--Lame thin-plate operator captures the 
 three lowest Lamb modes (A_0, S_0, SH_0) with the predicted multipolar
 structure of the T-matrix.
 
