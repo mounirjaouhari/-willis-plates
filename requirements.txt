@@ -4,3 +4,4 @@ matplotlib>=3.7
 scikit-fem>=9.0
 meshio>=5.3
 shapely>=2.0
+ 
