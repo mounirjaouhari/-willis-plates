@@ -1,4 +1,4 @@
-# Protocol mapping — Article §6 ↔ scripts ↔ data ↔ figures
+# Protocol mapping — Article §6 ↔ scripts ↔ data ↔ figures 
 
 This document gives the bijection between the eight numerical protocols of
 Section 6 of the paper, the reproducibility scripts of `scripts/`, the
