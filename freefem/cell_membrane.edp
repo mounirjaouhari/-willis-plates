@@ -1,5 +1,5 @@
 // Cell problem: in-plane Lame on unit cell with circular hole.
-// Computes C^eff for several packing fractions phi.
+// Computes C^eff for several packing fractions phi. 
 
 verbosity = 0;
 
