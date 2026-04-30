@@ -1,4 +1,4 @@
-"""
+""" 
 Numerical demonstration of Theorem 3.3 (activation/vanishing of the Willis
 coupling tensor under broken/preserved mirror symmetry).
 
