@@ -1,4 +1,4 @@
-"""
+""" 
 Q2 / Phase 2 -- Coupled Bloch-Floquet evaluation of the Willis tensor.
 
 Solves the coupled membrane-bending cell problem of Theorem 3.3 with mirror-broken
