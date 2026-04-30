@@ -1,4 +1,4 @@
-"""
+""" 
 Q2 -- L1: Frequency sweep of the dynamic effective tensors near the
 internal-resonator pole.
 
