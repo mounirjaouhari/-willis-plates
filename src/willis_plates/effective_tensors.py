@@ -1,5 +1,5 @@
 """
-Dilute-limit computation of the homogenized Willis coupling tensor S^eff
+Dilute-limit computation of the homogenized Willis coupling tensor S^eff 
 for a fixed asymmetric inclusion geometry.
 
 Setup:
