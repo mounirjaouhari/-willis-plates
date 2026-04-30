@@ -1,4 +1,4 @@
-"""
+""" 
 Generate the convergence figure from the data produced by multipolar_convergence.py.
 
 Produces a TikZ-importable figure (via pgfplots-readable .dat format) AND a PDF
