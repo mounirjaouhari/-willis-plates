@@ -1,4 +1,4 @@
-"""
+""" 
 Q2 / L4 -- Stochastic validation of QCA at K=200 realizations, N=50 inclusions.
 
 Strategy:
