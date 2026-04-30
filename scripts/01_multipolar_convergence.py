@@ -1,5 +1,5 @@
 """
-Numerical validation of Proposition 2.4 (multipolar truncation error).
+Numerical validation of Proposition 2.4 (multipolar truncation error). 
 
 Setup:
     A rigid circular hole of radius a in an infinite Kirchhoff plate with
