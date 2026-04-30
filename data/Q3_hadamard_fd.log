@@ -1,0 +1,93 @@
+Transforming over 1000 vertices to C_CONTIGUOUS.
+Transforming over 1000 elements to C_CONTIGUOUS.
+Transforming over 1000 vertices to C_CONTIGUOUS.
+Transforming over 1000 elements to C_CONTIGUOUS.
+Transforming over 1000 vertices to C_CONTIGUOUS.
+Transforming over 1000 elements to C_CONTIGUOUS.
+Transforming over 1000 vertices to C_CONTIGUOUS.
+Transforming over 1000 elements to C_CONTIGUOUS.
+Transforming over 1000 vertices to C_CONTIGUOUS.
+Transforming over 1000 elements to C_CONTIGUOUS.
+Transforming over 1000 vertices to C_CONTIGUOUS.
+Transforming over 1000 elements to C_CONTIGUOUS.
+Transforming over 1000 vertices to C_CONTIGUOUS.
+Transforming over 1000 elements to C_CONTIGUOUS.
+Transforming over 1000 vertices to C_CONTIGUOUS.
+Transforming over 1000 elements to C_CONTIGUOUS.
+Transforming over 1000 vertices to C_CONTIGUOUS.
+Transforming over 1000 elements to C_CONTIGUOUS.
+Transforming over 1000 vertices to C_CONTIGUOUS.
+Transforming over 1000 elements to C_CONTIGUOUS.
+Transforming over 1000 vertices to C_CONTIGUOUS.
+Transforming over 1000 elements to C_CONTIGUOUS.
+Transforming over 1000 vertices to C_CONTIGUOUS.
+Transforming over 1000 elements to C_CONTIGUOUS.
+Transforming over 1000 vertices to C_CONTIGUOUS.
+Transforming over 1000 elements to C_CONTIGUOUS.
+Transforming over 1000 vertices to C_CONTIGUOUS.
+Transforming over 1000 elements to C_CONTIGUOUS.
+Transforming over 1000 vertices to C_CONTIGUOUS.
+Transforming over 1000 elements to C_CONTIGUOUS.
+Transforming over 1000 vertices to C_CONTIGUOUS.
+Transforming over 1000 elements to C_CONTIGUOUS.
+Transforming over 1000 vertices to C_CONTIGUOUS.
+Transforming over 1000 elements to C_CONTIGUOUS.
+Transforming over 1000 vertices to C_CONTIGUOUS.
+Transforming over 1000 elements to C_CONTIGUOUS.
+# Q3 / L7 -- Hadamard FD validation (annular membrane cell)
+# E=1.0, nu=0.3, lam*=0.3297, mu=0.3846
+# Annulus: a=0.178412, R=0.5
+# Mesh: n_r=30, n_theta=120
+
+# Base J(a=0.1784) = 0.613474
+# C^(0)_1111 = lam* + 2mu = 1.0989
+# J0 / |annulus area| (= pi (R^2 - a^2)) = 0.8951
+
+# Mesh convergence at a_inc:
+  (n_r,n_theta)=(20,80): J = 0.613126
+  (n_r,n_theta)=(30,120): J = 0.613474
+  (n_r,n_theta)=(40,160): J = 0.613596
+  (n_r,n_theta)=(50,200): J = 0.613653
+
+# Hill-Mandel verification (J_mix = J_eng at cell-problem optimum):
+  J_mix = int A:eps_tot:e^(11) dy  = 0.613474
+  J_eng = int A:eps_tot:eps_tot dy = 0.613474
+  |J_mix - J_eng| / J_mix         = 3.077e-15
+
+# Finite-difference sweep:
+           t       J(a+t)         D_FD
+  ------------------------------------------
+     2.0e-02     0.569177    -2.214816
+     1.0e-02     0.591408    -2.206563
+     5.0e-03     0.602466    -2.201509
+     2.0e-03     0.609077    -2.198165
+     1.0e-03     0.611277    -2.196997
+     5.0e-04     0.612375    -2.196403
+     2.0e-04     0.613034    -2.196043
+
+# Analytical dJ/da = -oint A:(eps_tot):(eps_tot) dl  (FacetBasis P2)
+  G_ana = -2.196439
+# Mesh convergence of G_ana:
+    (n_r,n_theta)=(20,80): G = -2.195900
+    (n_r,n_theta)=(30,120): G = -2.196439
+    (n_r,n_theta)=(40,160): G = -2.196610
+    (n_r,n_theta)=(50,200): G = -2.196684
+
+# FD vs analytical Hadamard:
+           t         D_FD        G_ana        |D-G|
+  ----------------------------------------------------
+     2.0e-02    -2.214816    -2.196439 1.837643e-02
+     1.0e-02    -2.206563    -2.196439 1.012356e-02
+     5.0e-03    -2.201509    -2.196439 5.070086e-03
+     2.0e-03    -2.198165    -2.196439 1.726000e-03
+     1.0e-03    -2.196997    -2.196439 5.580116e-04
+     5.0e-04    -2.196403    -2.196439 3.609651e-05
+     2.0e-04    -2.196043    -2.196439 3.958135e-04
+
+# Linear-regime mask (local slope within [0.5,1.5]): 4 of 7 points retained (t in [2.0e-03, 2.0e-02])
+# Empirical slope on linear regime: 1.030, R^2 = 0.9948
+# Theoretical slope (Hadamard, Theorem 5.2): 1.0
+# Discrepancy: 0.030
+
+CSV: C:\Users\Lenovo\Desktop\Generalized Effective Medium Theory for Elastic Metamaterials From Flexural Waves to Full Lamb Spectrum with Dynamic Homogenization and Topological Optimization\Article\code\data\Q3_hadamard_fd.csv
+Figure: C:\Users\Lenovo\Desktop\Generalized Effective Medium Theory for Elastic Metamaterials From Flexural Waves to Full Lamb Spectrum with Dynamic Homogenization and Topological Optimization\Article\figures\Q3_hadamard_fd.pdf

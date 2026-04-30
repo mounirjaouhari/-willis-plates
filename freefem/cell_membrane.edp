@@ -1,0 +1,99 @@
+// Cell problem: in-plane Lame on unit cell with circular hole.
+// Computes C^eff for several packing fractions phi.
+
+verbosity = 0;
+
+real Eyoung = 1.0;
+real nu = 0.30;
+real lambdaB = Eyoung * nu / ((1.0 + nu) * (1.0 - 2.0 * nu));
+real mu = Eyoung / (2.0 * (1.0 + nu));
+real lambdaStar = 2.0 * lambdaB * mu / (lambdaB + 2.0 * mu);
+
+cout << "# Cell membrane: E=" << Eyoung << " nu=" << nu << endl;
+cout << "# lambdaStar=" << lambdaStar << " mu=" << mu << endl;
+cout << "phi C1111 C2222 C1122 C1212" << endl;
+
+ofstream csvOut("data/cell_membrane.csv");
+csvOut << "phi C1111 C2222 C1122 C1212" << endl;
+
+real[int] phiList = [0.05, 0.10, 0.15, 0.20, 0.25, 0.30];
+
+for (int ip = 0; ip < phiList.n; ip++) {
+    real phi = phiList[ip];
+    real a = sqrt(phi / pi);
+
+    int nM = 60;
+    int nH = 50;
+    border outerB(t = -0.5, 0.5) { x = t; y = -0.5; label = 1; }
+    border outerR(t = -0.5, 0.5) { x = 0.5; y = t; label = 2; }
+    border outerT(t = 0.5, -0.5) { x = t; y = 0.5; label = 3; }
+    border outerL(t = 0.5, -0.5) { x = -0.5; y = t; label = 4; }
+    border holeC(t = 0, 2 * pi)  { x = a * cos(t); y = a * sin(t); label = 5; }
+
+    mesh Th = buildmesh(outerB(nM) + outerR(nM) + outerT(nM) + outerL(nM) + holeC(-nH));
+
+    fespace Vh(Th, [P2, P2], periodic = [[1, x], [3, x], [4, y], [2, y]]);
+
+    Vh [chi11x, chi11y], [chi22x, chi22y], [chi12x, chi12y];
+    Vh [v1, v2];
+
+    fespace Ph(Th, P0);
+    Ph indSolid = (x * x + y * y > a * a + 1.0e-10);
+
+    // Cell problem for e^{(11)}: solve for chi11
+    // a(chi, v) = - int A_{ij11} eps_ij(v) restricted to solid
+    // a(chi, v) = int A eps(chi):eps(v) restricted to solid
+    // RHS = + int (A_{ij11}) eps_ij(v) which for e^{(11)} = (1,0;0,0) yields:
+    //       + int [(lambdaStar + 2 mu) dx(v1) + lambdaStar dy(v2)] over solid
+
+    solve cell11([chi11x, chi11y], [v1, v2], solver = sparsesolver) =
+        int2d(Th)( indSolid * ( (lambdaStar + 2.0 * mu) * dx(chi11x) * dx(v1)
+                              + lambdaStar              * dy(chi11y) * dx(v1)
+                              + lambdaStar              * dx(chi11x) * dy(v2)
+                              + (lambdaStar + 2.0 * mu) * dy(chi11y) * dy(v2)
+                              + mu * (dy(chi11x) + dx(chi11y)) * (dy(v1) + dx(v2)) ) )
+      + int2d(Th)( indSolid * ( (lambdaStar + 2.0 * mu) * dx(v1)
+                              + lambdaStar              * dy(v2) ) );
+
+    solve cell22([chi22x, chi22y], [v1, v2], solver = sparsesolver) =
+        int2d(Th)( indSolid * ( (lambdaStar + 2.0 * mu) * dx(chi22x) * dx(v1)
+                              + lambdaStar              * dy(chi22y) * dx(v1)
+                              + lambdaStar              * dx(chi22x) * dy(v2)
+                              + (lambdaStar + 2.0 * mu) * dy(chi22y) * dy(v2)
+                              + mu * (dy(chi22x) + dx(chi22y)) * (dy(v1) + dx(v2)) ) )
+      + int2d(Th)( indSolid * ( lambdaStar              * dx(v1)
+                              + (lambdaStar + 2.0 * mu) * dy(v2) ) );
+
+    solve cell12([chi12x, chi12y], [v1, v2], solver = sparsesolver) =
+        int2d(Th)( indSolid * ( (lambdaStar + 2.0 * mu) * dx(chi12x) * dx(v1)
+                              + lambdaStar              * dy(chi12y) * dx(v1)
+                              + lambdaStar              * dx(chi12x) * dy(v2)
+                              + (lambdaStar + 2.0 * mu) * dy(chi12y) * dy(v2)
+                              + mu * (dy(chi12x) + dx(chi12y)) * (dy(v1) + dx(v2)) ) )
+      + int2d(Th)( indSolid * mu * (dy(v1) + dx(v2)) );
+
+    // Effective stiffness (cell volume = 1)
+    real avgSxx11 = int2d(Th)( indSolid * (
+        (lambdaStar + 2.0 * mu) * (1.0 + dx(chi11x))
+      + lambdaStar              * dy(chi11y) ) );
+    real avgSyy11 = int2d(Th)( indSolid * (
+        lambdaStar              * (1.0 + dx(chi11x))
+      + (lambdaStar + 2.0 * mu) * dy(chi11y) ) );
+
+    real avgSxx22 = int2d(Th)( indSolid * (
+        (lambdaStar + 2.0 * mu) * dx(chi22x)
+      + lambdaStar              * (1.0 + dy(chi22y)) ) );
+    real avgSyy22 = int2d(Th)( indSolid * (
+        lambdaStar              * dx(chi22x)
+      + (lambdaStar + 2.0 * mu) * (1.0 + dy(chi22y)) ) );
+
+    real avgSxy12 = int2d(Th)( indSolid * mu * (1.0 + dy(chi12x) + dx(chi12y)) );
+
+    real C1111 = avgSxx11;
+    real C2222 = avgSyy22;
+    real C1122 = avgSyy11;
+    real C1212 = avgSxy12;
+
+    cout << phi << " " << C1111 << " " << C2222 << " " << C1122 << " " << C1212 << endl;
+    csvOut << phi << " " << C1111 << " " << C2222 << " " << C1122 << " " << C1212 << endl;
+}

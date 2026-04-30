@@ -1,0 +1,20 @@
+// Quick test of FreeFEM Docker
+mesh Th = square(8, 8);
+cout << "FreeFEM running. Vertices: " << Th.nv << ", Triangles: " << Th.nt << endl;
+
+// Test biharmonic via Ciarlet-Raviart mixed formulation
+fespace Vh(Th, P1);
+Vh w, phi, v, psi;
+
+real f = 1.0;
+solve mixedBiharmonic([w, phi], [v, psi], solver=GMRES) =
+    int2d(Th)(phi*psi)
+  + int2d(Th)(dx(w)*dx(psi) + dy(w)*dy(psi))
+  + int2d(Th)(dx(phi)*dx(v) + dy(phi)*dy(v))
+  - int2d(Th)(f*v)
+  + on(1,2,3,4, w=0)
+  + on(1,2,3,4, phi=0);
+
+cout << "Mixed biharmonic solved." << endl;
+cout << "max|w| = " << w[].max << endl;
+cout << "min(w) = " << w[].min << endl;

@@ -1,0 +1,73 @@
+// Mesh convergence test for the membrane cell problem at phi = 0.20.
+
+verbosity = 0;
+real Eyoung = 1.0;
+real nu = 0.30;
+real lambdaB = Eyoung * nu / ((1.0 + nu) * (1.0 - 2.0 * nu));
+real mu = Eyoung / (2.0 * (1.0 + nu));
+real lambdaStar = 2.0 * lambdaB * mu / (lambdaB + 2.0 * mu);
+real phi = 0.20;
+real a = sqrt(phi / pi);
+real C1111coarse, C1111fine;
+
+// ---- Coarse mesh ----
+{
+    int nM = 60;
+    int nH = 50;
+    border outerB(t = -0.5, 0.5) { x = t; y = -0.5; label = 1; }
+    border outerR(t = -0.5, 0.5) { x = 0.5; y = t; label = 2; }
+    border outerT(t = 0.5, -0.5) { x = t; y = 0.5; label = 3; }
+    border outerL(t = 0.5, -0.5) { x = -0.5; y = t; label = 4; }
+    border holeC(t = 0, 2 * pi)  { x = a * cos(t); y = a * sin(t); label = 5; }
+    mesh Th = buildmesh(outerB(nM) + outerR(nM) + outerT(nM) + outerL(nM) + holeC(-nH));
+    fespace Vh(Th, [P2, P2], periodic = [[1, x], [3, x], [4, y], [2, y]]);
+    Vh [chi11x, chi11y];
+    Vh [v1, v2];
+    fespace Ph(Th, P0);
+    Ph indSolid = (x * x + y * y > a * a + 1.0e-10);
+    solve cell11c([chi11x, chi11y], [v1, v2], solver = sparsesolver) =
+        int2d(Th)( indSolid * ( (lambdaStar + 2.0 * mu) * dx(chi11x) * dx(v1)
+                              + lambdaStar              * dy(chi11y) * dx(v1)
+                              + lambdaStar              * dx(chi11x) * dy(v2)
+                              + (lambdaStar + 2.0 * mu) * dy(chi11y) * dy(v2)
+                              + mu * (dy(chi11x) + dx(chi11y)) * (dy(v1) + dx(v2)) ) )
+      + int2d(Th)( indSolid * ( (lambdaStar + 2.0 * mu) * dx(v1)
+                              + lambdaStar              * dy(v2) ) );
+    C1111coarse = int2d(Th)( indSolid * (
+        (lambdaStar + 2.0 * mu) * (1.0 + dx(chi11x))
+      + lambdaStar              * dy(chi11y) ) );
+}
+
+// ---- Fine mesh ----
+{
+    int nM = 120;
+    int nH = 100;
+    border outerB(t = -0.5, 0.5) { x = t; y = -0.5; label = 1; }
+    border outerR(t = -0.5, 0.5) { x = 0.5; y = t; label = 2; }
+    border outerT(t = 0.5, -0.5) { x = t; y = 0.5; label = 3; }
+    border outerL(t = 0.5, -0.5) { x = -0.5; y = t; label = 4; }
+    border holeC(t = 0, 2 * pi)  { x = a * cos(t); y = a * sin(t); label = 5; }
+    mesh Th = buildmesh(outerB(nM) + outerR(nM) + outerT(nM) + outerL(nM) + holeC(-nH));
+    fespace Vh(Th, [P2, P2], periodic = [[1, x], [3, x], [4, y], [2, y]]);
+    Vh [chi11x, chi11y];
+    Vh [v1, v2];
+    fespace Ph(Th, P0);
+    Ph indSolid = (x * x + y * y > a * a + 1.0e-10);
+    solve cell11f([chi11x, chi11y], [v1, v2], solver = sparsesolver) =
+        int2d(Th)( indSolid * ( (lambdaStar + 2.0 * mu) * dx(chi11x) * dx(v1)
+                              + lambdaStar              * dy(chi11y) * dx(v1)
+                              + lambdaStar              * dx(chi11x) * dy(v2)
+                              + (lambdaStar + 2.0 * mu) * dy(chi11y) * dy(v2)
+                              + mu * (dy(chi11x) + dx(chi11y)) * (dy(v1) + dx(v2)) ) )
+      + int2d(Th)( indSolid * ( (lambdaStar + 2.0 * mu) * dx(v1)
+                              + lambdaStar              * dy(v2) ) );
+    C1111fine = int2d(Th)( indSolid * (
+        (lambdaStar + 2.0 * mu) * (1.0 + dx(chi11x))
+      + lambdaStar              * dy(chi11y) ) );
+}
+
+real relErr = abs(C1111fine - C1111coarse) / abs(C1111fine);
+cout << "# Mesh convergence at phi = " << phi << endl;
+cout << "C1111 coarse (nM=60,  nH=50):  " << C1111coarse << endl;
+cout << "C1111 fine   (nM=120, nH=100): " << C1111fine   << endl;
+cout << "Relative change: " << relErr << endl;
