@@ -1,4 +1,4 @@
-"""
+""" 
 Q2 / Phase 2 -- Stochastic QCA validation via coherent transmission coefficient.
 
 Tests Proposition 3.1 (QCA asymptotic phi^{1/2} rate) using the metric
