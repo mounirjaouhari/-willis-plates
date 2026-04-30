@@ -1,5 +1,5 @@
 // Quick test of FreeFEM Docker
-mesh Th = square(8, 8);
+mesh Th = square(8, 8); 
 cout << "FreeFEM running. Vertices: " << Th.nv << ", Triangles: " << Th.nt << endl;
 
 // Test biharmonic via Ciarlet-Raviart mixed formulation
