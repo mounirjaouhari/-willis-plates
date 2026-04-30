@@ -1,4 +1,4 @@
-"""
+ """
 Q2 / L4 v2 -- Stochastic QCA with FIXED cluster size L = 5 wavelengths.
 
 The previous run (Q2_qca_stochastic.py) kept N=50 fixed and let L shrink with
