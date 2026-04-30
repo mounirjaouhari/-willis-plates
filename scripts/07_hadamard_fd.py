@@ -1,4 +1,4 @@
-"""
+""" 
 Q3 / L7 -- Hadamard shape derivative validation on the membrane sub-problem.
 
 Validates the structure of Theorem 5.2 on the simpler 2nd-order membrane cell
