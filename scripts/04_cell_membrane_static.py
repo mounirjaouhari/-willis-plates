@@ -1,4 +1,4 @@
-"""
+""" 
 Q2 / L5 -- Membrane cell-problem corrector fields visualized.
 
 Solves the static membrane cell problem of Theorem 3.2 (Section 6.4 of the
