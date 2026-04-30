@@ -1,4 +1,4 @@
-"""
+""" 
 Q2 / L4 v2 -- Honest analysis of the stochastic QCA error vs phi.
 
 Reads the log of Q2_qca_stochastic_v2.py (whatever phi values have completed)
