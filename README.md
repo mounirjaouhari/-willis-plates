@@ -4,7 +4,7 @@ Companion repository for the article
 
 > **Tensorial Effective Medium Theory for Thin Elastic Plates with Resonant
 > Inclusions: Emergence of a Willis Coupling Tensor and Topology-Driven Design**
-> N. J & H. Sekkali, 2026.
+> Mounir JAOUHARI & Anass Rachid, 2026.
 
 This repository reproduces the eight numerical protocols of Section 6 of the
 paper, validates the three theorems on well-posedness, two-scale homogenization,
