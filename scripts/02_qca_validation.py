@@ -1,4 +1,4 @@
-"""
+""" 
 Numerical validation of Proposition 3.1 (QCA convergence rate).
 
 Strategy:
