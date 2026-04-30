@@ -1,4 +1,4 @@
-"""Re-analyze Bloch-Floquet coupled output against the LEADING-ORDER closed form.
+"""Re-analyze Bloch-Floquet coupled output against the LEADING-ORDER closed form. 
 
 Reads Q2_bloch_coupled_omega.csv, computes S_LO(omega) = phi B^(1) (1 + R(omega))
 with B^(1) = 1.236, phi = 0.10, eta/omega_0 = 0.05. Plots S_num and S_LO together
