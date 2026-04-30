@@ -1,5 +1,5 @@
 """
-Generate the QCA effective wavenumber figure from validation data.
+Generate the QCA effective wavenumber figure from validation data. 
 Plots Re(k_eff)/k_b and Im(k_eff)/k_b vs phi, showing physical consistency
 of the Foldy formula in the dilute regime.
 """
