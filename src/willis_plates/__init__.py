@@ -1,7 +1,7 @@
 """willis_plates: companion code for the article.
 
 Tensorial Effective Medium Theory for Thin Elastic Plates with
-Resonant Inclusions: Emergence of a Willis Coupling Tensor and
+Resonant Inclusions: Emergence of a Willis Coupling Tensor and 
 Topology-Driven Design.
 
 N. Lmardi & H. Sekkali, 2026.
